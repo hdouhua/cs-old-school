@@ -1,0 +1,17 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: echo-cj
+spec:
+  schedule: "*/1 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+          - image: busybox
+            name: echo-job
+            imagePullPolicy: IfNotPresent
+            command: ["/bin/echo"]
+            args: ["hello", "world"]
