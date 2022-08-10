@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ngx-dep
+  labels:
+    app: ngx-dep
+
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ngx-dep
+
+  template:
+    metadata:
+      labels:
+        app: ngx-dep
+    spec:
+      containers:
+      - image: nginx:alpine
+        name: nginx
