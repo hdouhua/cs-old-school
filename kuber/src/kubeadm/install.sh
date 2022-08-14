@@ -11,3 +11,28 @@ sudo apt install -y kubeadm=1.23.9-00 kubelet=1.23.9-00 kubectl=1.23.9-00
 # 锁定这三个软件的版本，避免意外升级导致版本错误
 sudo apt-mark hold kubeadm kubelet kubectl
 # sudo apt-mark unhold kubeadm kubelet kubectl
+
+# 拉取所需镜像
+docker pull k8s.gcr.io/kube-apiserver:v1.23.9
+docker pull k8s.gcr.io/kube-controller-manager:v1.23.9
+docker pull k8s.gcr.io/kube-scheduler:v1.23.9
+docker pull k8s.gcr.io/kube-proxy:v1.23.9
+docker pull k8s.gcr.io/pause:3.6
+docker pull k8s.gcr.io/etcd:3.5.1-0
+docker pull k8s.gcr.io/coredns/coredns:v1.8.6
+
+# 设置快捷键
+cat <<EOF | tee -a ~/.bashrc
+
+# kube
+
+export out="--dry-run=client -o yaml"
+export ans="--all-namespaces"
+export kns="-n kube-system"
+alias k=kubectl
+
+# kube end
+EOF
+
+# 针对多网卡节点，指定 kubelet IP
+echo 'KUBELET_EXTRA_ARGS="--node-ip=192.168.56.101"' | tee -a /etc/default/kubelet
