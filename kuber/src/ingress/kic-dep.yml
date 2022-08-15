@@ -6,17 +6,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx-ingress
+  name: ngx-kic-dep
   namespace: nginx-ingress
+
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: nginx-ingress
+      app: ngx-kic-dep
+
   template:
     metadata:
       labels:
-        app: nginx-ingress
+        app: ngx-kic-dep
      #annotations:
        #prometheus.io/scrape: "true"
        #prometheus.io/port: "9113"
@@ -24,7 +26,7 @@ spec:
     spec:
       serviceAccountName: nginx-ingress
       containers:
-      - image: nginx/nginx-ingress:2.3.0
+      - image: nginx/nginx-ingress:2.3-alpine
         imagePullPolicy: IfNotPresent
         name: nginx-ingress
         ports:
@@ -67,6 +69,11 @@ spec:
             fieldRef:
               fieldPath: metadata.name
         args:
+          - -ingress-class=ngx-ink
+          - -health-status
+          - -ready-status
+          - -nginx-status
+
           - -nginx-configmaps=$(POD_NAMESPACE)/nginx-config
           - -default-server-tls-secret=$(POD_NAMESPACE)/default-server-secret
          #- -enable-cert-manager
