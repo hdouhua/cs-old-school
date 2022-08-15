@@ -5,6 +5,10 @@ metadata:
 
 spec:
   ingressClassName: ngx-ink
+  tls:
+  - hosts:
+    - ngx.test
+    secretName: ngx.test-secret
   rules:
   - host: ngx.test
     http:

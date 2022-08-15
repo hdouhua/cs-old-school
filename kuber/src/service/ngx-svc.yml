@@ -6,6 +6,7 @@ metadata:
     app: ngx-svc
 
 spec:
+  # type: ClusterIP
   type: NodePort
   selector:
     app: ngx-dep
