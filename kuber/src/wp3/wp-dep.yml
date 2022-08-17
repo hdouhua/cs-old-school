@@ -46,7 +46,7 @@ spec:
             name: wp-cm
 
 ---
-# k expose deploy wp-dep --port=80 --target-port=80 $out
+# k expose deploy wp-dep --port=80 --type=NodePort --name=wp-svc $out
 apiVersion: v1
 kind: Service
 metadata:

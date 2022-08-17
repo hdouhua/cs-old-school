@@ -31,6 +31,7 @@ cat <<EOF | tee -a ~/.bashrc
 export out="--dry-run=client -o yaml"
 export ans="--all-namespaces"
 export kns="-n kube-system"
+export nns="-n nginx-ingress"
 alias k=kubectl
 
 # kube end

@@ -37,7 +37,8 @@ spec:
               number: 80
 
 ---
-
+# copied from ../ingress/kic-dep.yml
+# use hostNetwork
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -60,8 +61,8 @@ spec:
     spec:
       serviceAccountName: nginx-ingress
 
-      # use host network
-      hostNetwork: true
+      # # use host network
+      # hostNetwork: true
 
       containers:
       - image: nginx/nginx-ingress:2.3-alpine
@@ -112,3 +113,27 @@ spec:
           - -default-server-tls-secret=$(POD_NAMESPACE)/default-server-secret
 
 ---
+# k expose deploy wp-kic-dep --port=80,443 --type=NodePort --name=wp-kic-svc -n nginx-ingress $out
+apiVersion: v1
+kind: Service
+metadata:
+  name: wp-kic-svc
+  namespace: nginx-ingress
+  labels:
+    tag: wp3
+
+spec:
+  selector:
+    app: wp-kic-dep-pod
+  type: NodePort
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 80
+    nodePort: 30080
+  - name: https
+    port: 443
+    protocol: TCP
+    targetPort: 443
+    nodePort: 30443
