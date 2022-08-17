@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # remove ingress
 kubectl delete namespace nginx-ingress

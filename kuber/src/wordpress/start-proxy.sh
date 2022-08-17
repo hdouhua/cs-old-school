@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # forward net traffic
 kubectl port-forward wp-pod 8080:80 &
 

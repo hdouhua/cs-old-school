@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 #
 kubectl apply -f common/ns-and-sa.yaml
