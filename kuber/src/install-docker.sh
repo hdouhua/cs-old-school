@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 sudo apt install iptables
 
 wget https://download.docker.com/linux/ubuntu/dists/jammy/pool/stable/amd64/containerd.io_1.6.7-1_amd64.deb

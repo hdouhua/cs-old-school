@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ngx-ing
+
+spec:
+  ingressClassName: ngx-ink
+  tls:
+  - hosts:
+    - ngx.test
+    secretName: ngx.test-secret
+  rules:
+  - host: ngx.test
+    http:
+      paths:
+      - path: /
+        pathType: Exact
+        backend:
+          service:
+            name: ngx-svc
+            port:
+              number: 8080

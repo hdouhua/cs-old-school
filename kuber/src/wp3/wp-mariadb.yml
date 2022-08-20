@@ -1,0 +1,61 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mariadb-cm
+  labels:
+    tag: wp3
+
+data:
+  DATABASE: 'db'
+  USER: 'wp'
+  PASSWORD: '123'
+  ROOT_PASSWORD: '12345'
+
+---
+# k create deploy maria-dep --image="mariadb:10" $out
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mariadb-dep
+  labels:
+    tag: wp3
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mariadb-dep-pod
+
+  template:
+    metadata:
+      labels:
+        app: mariadb-dep-pod
+        tag: wp3
+    spec:
+      containers:
+      - image: mariadb:10
+        name: mariadb
+        ports:
+        - containerPort: 3306
+
+        envFrom:
+        - prefix: "MARIADB_"
+          configMapRef:
+            name: mariadb-cm
+
+---
+# k expose deploy mariadb-dep --port=3306 --target-port=3306 $out
+apiVersion: v1
+kind: Service
+metadata:
+  name: mariadb-svc
+  labels:
+    tag: wp3
+
+spec:
+  selector:
+    app: mariadb-dep-pod
+  ports:
+  - port: 3306
+    protocol: TCP
+    targetPort: 3306
