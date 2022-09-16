@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfs-100m-pv
+
+spec:
+  storageClassName: nfs-test
+  accessModes:
+  - ReadWriteMany
+  capacity:
+    storage: 100Mi
+
+  nfs:
+    server: 192.168.56.101
+    path: /tmp/nfs/100m-pv
