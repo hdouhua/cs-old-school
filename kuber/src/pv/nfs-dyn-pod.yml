@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nfs-dyn-pod
+
+spec:
+  volumes:
+  - name: nfs-dyn-vol
+    persistentVolumeClaim:
+      claimName: nfs-dyn-10m-pvc
+
+  containers:
+    - name: ngx-nfs-dyn-pod
+      image: nginx:alpine
+      ports:
+      - containerPort: 80
+    
+      volumeMounts:
+      - name: nfs-dyn-vol
+        mountPath: /tmp
