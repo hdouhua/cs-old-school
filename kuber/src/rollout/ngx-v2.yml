@@ -8,6 +8,7 @@ metadata:
   #   kubernetes.io/change-cause: v2, ngx=1.22
 
 spec:
+  # revisionHistoryLimit: 10 # to specify how many old ReplicaSets you want to retain
   minReadySeconds: 15 # 为观察 Pod 变化而额外增加的
   replicas: 4
   selector:
