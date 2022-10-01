@@ -7,6 +7,9 @@ data:
   default.conf: |
     server {
       listen 80;
+      location / {
+        return 200 'homepage';
+      }
       location = /ready {
         return 200 'I am ready';
       }
