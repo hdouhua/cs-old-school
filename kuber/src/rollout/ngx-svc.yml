@@ -1,17 +1,19 @@
+# kubectl create service clusterip ngx-svc --http=80 $out
+
 apiVersion: v1
 kind: Service
 metadata:
   name: ngx-svc
   labels:
-    app: ngx-svc
+    app: rollout-demo
 
 spec:
   selector:
     app: ngx-dep
 
-  # type: ClusterIP
-  type: NodePort
+  type: ClusterIP
   ports:
-  - port: 8080
+  - name: "80"
+    port: 80
     protocol: TCP
     targetPort: 80

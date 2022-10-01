@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ngx-dep
+  labels:
+    app: rollout-demo
+  # annotations:
+  #   kubernetes.io/change-cause: v2, ngx=1.22
+
+spec:
+  # revisionHistoryLimit: 10 # to specify how many old ReplicaSets you want to retain
+  minReadySeconds: 15 # 为观察 Pod 变化而额外增加的
+  replicas: 4
+  selector:
+    matchLabels:
+      app: ngx-dep
+
+  template:
+    metadata:
+      labels:
+        app: ngx-dep
+    spec:
+      volumes:
+      - name: ngx-conf-vol
+        configMap:
+          name: ngx-conf
+
+      containers:
+      - image: nginx:1.22-alpine
+        name: nginx
+
+        volumeMounts:
+        - mountPath: /etc/nginx/conf.d
+          name: ngx-conf-vol

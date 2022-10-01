@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-svc # 指定的 service name 必须与 StatefulSet serviceName 相同
+
+spec:
+  selector:
+    app: redis-sts  # 指定 StatefulSet name
+
+  type: ClusterIP
+  ports:
+  - port: 6379
+    protocol: TCP
+    targetPort: 6379
