@@ -4513,6 +4513,8 @@ spec:
             # Auto-detect the BGP IP address.
             - name: IP
               value: "autodetect"
+            - name: IP_AUTODETECTION_METHOD
+              value: "skip-interface=enp0s8"
             # Enable IPIP
             - name: CALICO_IPV4POOL_IPIP
               value: "Always"
