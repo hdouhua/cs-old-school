@@ -94,17 +94,18 @@ spec:
   selector:
     app: ngx-lb-dep
 
-  type: NodePort
   ports:
   - name: http
     port: 80
     protocol: TCP
     targetPort: 80
-    nodePort: 30080
   - name: https
     port: 443
     protocol: TCP
     targetPort: 443
-    nodePort: 30443
+
+  externalIPs:
+    - 192.168.56.101
+    - 192.168.56.103
 
 ---
