@@ -1,0 +1,111 @@
+apiVersion: networking.k8s.io/v1
+kind: IngressClass
+metadata:
+  name: ngx-lb
+  # annotations:
+  #   ingressclass.kubernetes.io/is-default-class: "true"
+
+spec:
+  controller: nginx.org/ingress-controller
+
+---
+
+# nginx ingress controller
+# copied from ../ingress/kic-dep.yml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: nginx-ingress
+  name: ngx-lb-dep
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ngx-lb-dep
+
+  template:
+    metadata:
+      labels:
+        app: ngx-lb-dep
+
+    spec:
+      serviceAccountName: nginx-ingress
+
+      containers:
+      - image: nginx/nginx-ingress:2.3-alpine
+        imagePullPolicy: IfNotPresent
+        name: nginx-ingress
+        ports:
+        - name: http
+          containerPort: 80
+        - name: https
+          containerPort: 443
+        - name: readiness-port
+          containerPort: 8081
+        - name: prometheus
+          containerPort: 9113
+        readinessProbe:
+          httpGet:
+            path: /nginx-ready
+            port: readiness-port
+          periodSeconds: 1
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+        securityContext:
+          allowPrivilegeEscalation: true
+          runAsUser: 101 #nginx
+          runAsNonRoot: true
+          capabilities:
+            drop:
+            - ALL
+            add:
+            - NET_BIND_SERVICE
+        env:
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        args:
+          - -ingress-class=ngx-lb
+          - -health-status
+          - -ready-status
+          - -nginx-status
+          - -nginx-configmaps=$(POD_NAMESPACE)/nginx-config
+          - -default-server-tls-secret=$(POD_NAMESPACE)/default-server-secret
+
+---
+
+# k expose deploy ngx-lb-dep --port=80:30080,443:30443 --type=NodePort --name=ngx-lb-svc -n nginx-ingress $out
+# k create service nodeport ngx-lb-svc --tcp=80,443 -n nginx-ingress $out
+apiVersion: v1
+kind: Service
+metadata:
+  name: ngx-lb-svc
+  namespace: nginx-ingress
+
+spec:
+  selector:
+    app: ngx-lb-dep
+
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  - name: https
+    port: 443
+    protocol: TCP
+    targetPort: 443
+
+  externalIPs:
+    - 192.168.56.101
+    - 192.168.56.103
+
+---

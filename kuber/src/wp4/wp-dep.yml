@@ -1,0 +1,63 @@
+# k create cm wp-cm -n=wp4 $out
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: wp-cm
+  namespace: wp4
+
+data:
+  HOST: mariadb-sts-0.mariadb-svc
+  USER: 'wp'
+  PASSWORD: '123'
+  NAME: 'db'
+
+---
+
+# k create deploy wp-dep --image="wordpress:5" --replicas=2 -n=wp4 $out
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wp-dep
+  namespace: wp4
+
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: wp-pod
+
+  template:
+    metadata:
+      labels:
+        app: wp-pod
+    spec:
+      containers:
+      - image: wordpress:5
+        name: wordpress
+        ports:
+        - containerPort: 80
+
+        envFrom:
+        - prefix: WORDPRESS_DB_
+          configMapRef:
+            name: wp-cm
+
+---
+
+# k expose deploy wp-dep --type=NodePort --target-port=30088 --name=wp-svc -n=wp4 $out
+apiVersion: v1
+kind: Service
+metadata:
+  name: wp-svc
+  namespace: wp4
+
+spec:
+  selector:
+    app: wp-pod
+  type: NodePort
+  ports:
+  - name: http80
+    port: 80
+    protocol: TCP
+    targetPort: 80
+    nodePort: 30088
