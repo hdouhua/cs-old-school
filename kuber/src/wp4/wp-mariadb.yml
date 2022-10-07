@@ -18,6 +18,7 @@ data:
   ROOT_PASSWORD: '12345'
 
 ---
+
 # k create deploy mariadb-dep --image="mariadb:10" -n wp4 $out
 apiVersion: apps/v1
 kind: StatefulSet
@@ -68,6 +69,7 @@ spec:
           mountPath: /var/lib/mysql
 
 ---
+
 # kubectl create service clusterip mariadb-svc --clusterip='None' --tcp=3306 -n wp4 $out
 apiVersion: v1
 kind: Service
