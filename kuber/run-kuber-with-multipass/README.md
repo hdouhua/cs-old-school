@@ -56,7 +56,7 @@
       multipass shell vm2
       cd vm
       ./install.sh
-      ./_3b_worker.sh
+      ./init_worker.sh
       ```
 
 1. verify cluster

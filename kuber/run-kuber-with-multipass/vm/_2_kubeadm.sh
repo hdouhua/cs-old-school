@@ -18,9 +18,7 @@ sudo apt-mark hold kubelet kubeadm kubectl
 
 # set shortcuts
 cat <<EOF | tee -a ~/.bashrc
-
 # kube
-
 export out="--dry-run=client -o yaml"
 export kns="-n kube-system"
 export nns="-n nginx-ingress"

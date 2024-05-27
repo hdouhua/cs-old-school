@@ -11,4 +11,4 @@
 
 # instlal via brew
 brew install kubectl
-export KUBECONFIG=~/workspace/lab/cs-old-school/kuber/run-kuber-with-multipass/.kube/config
+export KUBECONFIG=~/workspace/lab/cs-old-school/kuber/run-kuber-with-multipass/.kubeadm
