@@ -38,7 +38,17 @@ export out="--dry-run=client -o yaml"
 # export ans="--all-namespaces"
 export kns="-n kube-system"
 export nns="-n nginx-ingress"
-alias k=kubectl
+
+#--- alias
+alias k='kubectl'
+alias kg='k get'
+alias kd='k describe'
+alias kl='k logs'
+alias kc='k create'
+source <(kubectl completion bash)
+source <(kubectl completion bash | sed 's/kubectl/k/g' )
+complete -F __start_kubectl k
+#---
 
 # kube end
 EOF
